@@ -3,3 +3,21 @@ spring:
     name: accounts
   profiles:
     active: production
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+# ACTUATOR INFO
+info:
+  app:
+    name: "Accounts"
+    version: "0.0.1"
+    profile: ${spring.profiles.active}
+  serverInfo:
+    port: ${server.port}
+
+application:
+  allow-get-accounts: ${accounts.allow-get-accounts}
