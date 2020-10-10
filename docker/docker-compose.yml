@@ -1,6 +1,7 @@
 version: '3'
 services:
-  dbpostgresql:
+  dbpostgresql_accounts:
+    container_name: "accounts_db"
     image: postgres
     ports:
       - "5432:5432"
