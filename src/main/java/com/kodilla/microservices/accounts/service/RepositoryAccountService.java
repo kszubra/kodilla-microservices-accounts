@@ -1,6 +1,7 @@
 package com.kodilla.microservices.accounts.service;
 
 import com.kodilla.microservices.accounts.api.request.AccountCreateRequest;
+import com.kodilla.microservices.accounts.api.response.AccountExistsResponse;
 import com.kodilla.microservices.accounts.api.response.CustomerAccountsResponse;
 import com.kodilla.microservices.accounts.api.snapshot.AccountSnapshot;
 import com.kodilla.microservices.accounts.domain.model.Account;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,6 +50,15 @@ public class RepositoryAccountService implements AccountService {
                 .collect(Collectors.toList());
 
         return new CustomerAccountsResponse(accounts);
+    }
+
+    @Override
+    public AccountExistsResponse getAccountExists(Long accountId) {
+        Account account = accountRepository.findById(accountId).orElse(null);
+        if(Objects.nonNull(account)) {
+            return AccountExistsResponse.exists(accountId, account.getCustomerId());
+        }
+        return AccountExistsResponse.notExists(accountId);
     }
 
     private Account getById(Long id) {
