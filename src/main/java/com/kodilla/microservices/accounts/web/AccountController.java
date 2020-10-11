@@ -39,6 +39,7 @@ public class AccountController {
 
     @GetMapping
     public CustomerAccountsResponse getCustomerAccounts(@RequestParam Long customerId) {
+        log.info("Get accounts for customer id {}", customerId);
         if(!allowGetAccounts) {
             log.info("Getting accounts disabled");
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Getting accounts is disabled");
