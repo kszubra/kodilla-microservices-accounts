@@ -1,6 +1,7 @@
 package com.kodilla.microservices.accounts.web;
 
 import com.kodilla.microservices.accounts.api.request.AccountCreateRequest;
+import com.kodilla.microservices.accounts.api.response.AccountExistsResponse;
 import com.kodilla.microservices.accounts.api.response.CustomerAccountsResponse;
 import com.kodilla.microservices.accounts.api.snapshot.AccountSnapshot;
 import com.kodilla.microservices.accounts.service.interfaces.AccountService;
@@ -50,5 +51,10 @@ public class AccountController {
     @GetMapping("/{id}")
     public AccountSnapshot getBankAccount(@PathVariable Long id) {
         return accountService.getAccountSnapshot(id);
+    }
+
+    @GetMapping("/exists/{id}")
+    public AccountExistsResponse getAccountExists(@PathVariable Long id) {
+        return accountService.getAccountExists(id);
     }
 }
