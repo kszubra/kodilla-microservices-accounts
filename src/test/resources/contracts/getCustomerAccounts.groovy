@@ -1,4 +1,3 @@
-package contracts
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
@@ -18,7 +17,8 @@ Contract.make {
                {
                   "id": 95213,
                   "nrb": "08897810189710581776778244",
-                  "currency": "PLN"
+                  "currency": "PLN",
+                  "availableFunds": 1
                }
             ]
          }
