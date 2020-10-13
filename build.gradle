@@ -1,3 +1,15 @@
+import org.springframework.cloud.contract.verifier.config.TestFramework
+
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'org.springframework.cloud:spring-cloud-contract-gradle-plugin:2.2.3.RELEASE'
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.3.4.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
@@ -8,8 +20,12 @@ group = 'com.kodilla.microservices'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+apply plugin: 'spring-cloud-contract'
+apply plugin: 'maven-publish'
+
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 ext {
@@ -31,9 +47,13 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+    testImplementation 'com.h2database:h2:1.4.200'
 }
 
 dependencyManagement {
@@ -42,6 +62,19 @@ dependencyManagement {
     }
 }
 
+contracts {
+    testFramework = TestFramework.JUNIT5
+    packageWithBaseClasses = 'com.kodilla.microservices.accounts'
+}
+
 test {
     useJUnitPlatform()
+}
+
+task stubsJar(type: Jar) {
+    classifier = "stubs"
+    into("META-INF/${project.group}/${project.name}/${project.version}/mappings") {
+        include('**/*.*')
+        from("${project.buildDir}/generated-snippets/stubs")
+    }
 }
