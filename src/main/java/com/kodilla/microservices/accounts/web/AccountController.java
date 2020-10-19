@@ -1,8 +1,10 @@
 package com.kodilla.microservices.accounts.web;
 
 import com.kodilla.microservices.accounts.api.request.AccountCreateRequest;
+import com.kodilla.microservices.accounts.api.request.TransactionPermissionRequest;
 import com.kodilla.microservices.accounts.api.response.AccountExistsResponse;
 import com.kodilla.microservices.accounts.api.response.CustomerAccountsResponse;
+import com.kodilla.microservices.accounts.api.response.TransactionPermissionResponse;
 import com.kodilla.microservices.accounts.api.snapshot.AccountSnapshot;
 import com.kodilla.microservices.accounts.service.interfaces.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +48,11 @@ public class AccountController {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Getting accounts is disabled");
         }
         return accountService.getCustomerAccounts(customerId);
+    }
+
+    @GetMapping("/request-permission")
+    public TransactionPermissionResponse requestTransactionPermission(@Valid TransactionPermissionRequest request) {
+        return accountService.requestTransactionPermission(request);
     }
 
     @GetMapping("/{id}")

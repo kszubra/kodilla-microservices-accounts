@@ -1,8 +1,10 @@
 package com.kodilla.microservices.accounts.service;
 
 import com.kodilla.microservices.accounts.api.request.AccountCreateRequest;
+import com.kodilla.microservices.accounts.api.request.TransactionPermissionRequest;
 import com.kodilla.microservices.accounts.api.response.AccountExistsResponse;
 import com.kodilla.microservices.accounts.api.response.CustomerAccountsResponse;
+import com.kodilla.microservices.accounts.api.response.TransactionPermissionResponse;
 import com.kodilla.microservices.accounts.api.snapshot.AccountSnapshot;
 import com.kodilla.microservices.accounts.domain.model.Account;
 import com.kodilla.microservices.accounts.domain.repository.AccountRepository;
@@ -34,6 +36,15 @@ public class RepositoryAccountService implements AccountService {
         log.info("Added bank account with id: {}", id);
 
         return id;
+    }
+
+    @Override
+    public TransactionPermissionResponse requestTransactionPermission(TransactionPermissionRequest request) {
+        log.info("Requesting transaction permission for amount: {}", request.getValue());
+        Account account = accountRepository.findByNrb(request.getFromAccountNumber()).orElseThrow(IllegalArgumentException::new);
+        int comparison = account.getAvailableFunds().compareTo(request.getValue());
+
+        return comparison > -1 ? TransactionPermissionResponse.requestAccepted() : TransactionPermissionResponse.requestDenied();
     }
 
     @Override
