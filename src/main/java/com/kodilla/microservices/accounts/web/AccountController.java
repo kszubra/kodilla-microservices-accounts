@@ -7,6 +7,7 @@ import com.kodilla.microservices.accounts.api.response.CustomerAccountsResponse;
 import com.kodilla.microservices.accounts.api.response.TransactionPermissionResponse;
 import com.kodilla.microservices.accounts.api.snapshot.AccountSnapshot;
 import com.kodilla.microservices.accounts.service.interfaces.AccountService;
+import com.kodilla.microservices.commons.AccountsUpdate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,5 +65,10 @@ public class AccountController {
     @GetMapping("/exists/{id}")
     public AccountExistsResponse getAccountExists(@PathVariable Long id) {
         return accountService.getAccountExists(id);
+    }
+
+    @PutMapping("/account-update")
+    public void updateAccounts(@RequestBody AccountsUpdate update) {
+        accountService.updateAccounts(update);
     }
 }

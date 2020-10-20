@@ -9,6 +9,7 @@ import com.kodilla.microservices.accounts.api.snapshot.AccountSnapshot;
 import com.kodilla.microservices.accounts.domain.model.Account;
 import com.kodilla.microservices.accounts.domain.repository.AccountRepository;
 import com.kodilla.microservices.accounts.service.interfaces.AccountService;
+import com.kodilla.microservices.commons.AccountsUpdate;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,23 @@ public class RepositoryAccountService implements AccountService {
         log.info("Added bank account with id: {}", id);
 
         return id;
+    }
+
+    @Override
+    @Transactional
+    public void updateAccounts(AccountsUpdate update) {
+        log.info("Updating accounts");
+
+        accountRepository.findByNrb(update.getChargedAccount()).ifPresent(account -> {
+            account.setAvailableFunds(account.getAvailableFunds().subtract(update.getValue()));
+        });
+
+        accountRepository.findByNrb(update.getCreditedAccount()).ifPresent(account -> {
+            account.setAvailableFunds(account.getAvailableFunds().add(update.getValue()));
+        });
+
+        log.info("Updating finished");
+
     }
 
     @Override
