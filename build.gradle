@@ -24,8 +24,8 @@ apply plugin: 'spring-cloud-contract'
 apply plugin: 'maven-publish'
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
 }
 
 ext {
@@ -33,6 +33,7 @@ ext {
 }
 
 dependencies {
+    implementation 'com.kodilla:commons:0.0.1'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
